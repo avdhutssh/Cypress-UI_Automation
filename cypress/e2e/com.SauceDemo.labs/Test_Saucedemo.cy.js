@@ -109,8 +109,8 @@ describe('SauceDemo E2E Tests', () => {
     cy.verifyMessage(pages.checkoutPage.elements.titleHeader, 'Checkout: Overview');
   });
 
-  it.only('TC10 - Verify Removing Items from the Cart', () => {
-    pages.loginPage.login('standard_user', 'secret_sauce');
+  it('TC10 - Verify Removing Items from the Cart', () => {
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.addProductToCartByIndex(0);
     pages.inventoryPage.addProductToCartByIndex(1);
     pages.inventoryPage.navigateToCart();
@@ -120,19 +120,12 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC10_CartAfterRemovingItem');
   });
 
-  // @tag smoke
-  it('TC11 - Validate Login with Locked-Out User', () => {
-    login('locked_out_user', 'secret_sauce');
-
-    cy.get('[data-test="error"]').should(
-      'have.text',
-      'Epic sadface: Sorry, this user has been locked out.'
-    );
-
+  it.only('TC11 - Validate Login with Locked-Out User', () => {
+    pages.loginPage.login(testData.users.lockedOut.username, testData.users.lockedOut.password);
+    cy.verifyMessage(pages.loginPage.elements.errorMessage, 'Epic sadface: Sorry, this user has been locked out.');
     cy.screenshot('TC11_LockedOutUserLoginAttempt');
   });
 
-  // @tag smoke
   it('TC12 - Verify Persistent Cart Contents After Logout/Login', () => {
     login('standard_user', 'secret_sauce');
 
