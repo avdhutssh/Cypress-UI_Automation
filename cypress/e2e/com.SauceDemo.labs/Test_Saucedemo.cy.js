@@ -93,7 +93,7 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC08_ProductDetailsPage');
   });
 
-  it.only('TC09 - Validate Error Messages for Checkout Information', () => {
+  it('TC09 - Validate Error Messages for Checkout Information', () => {
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.addSpecificProductToCart(testData.products.productName);
     pages.inventoryPage.navigateToCart();
@@ -109,26 +109,14 @@ describe('SauceDemo E2E Tests', () => {
     cy.verifyMessage(pages.checkoutPage.elements.titleHeader, 'Checkout: Overview');
   });
 
-  // @tag regression
-  it('TC10 - Verify Removing Items from the Cart', () => {
-    login('standard_user', 'secret_sauce');
-
-    cy.get('.inventory_item').eq(0).within(() => {
-      cy.contains('Add to cart').click();
-    });
-
-    cy.get('.inventory_item').eq(1).within(() => {
-      cy.contains('Add to cart').click();
-    });
-
-    cy.get('.shopping_cart_link').click();
-
-    cy.get('.cart_item').first().within(() => {
-      cy.contains('Remove').click();
-    });
-
-    cy.get('.cart_item').should('have.length', 1);
-
+  it.only('TC10 - Verify Removing Items from the Cart', () => {
+    pages.loginPage.login('standard_user', 'secret_sauce');
+    pages.inventoryPage.addProductToCartByIndex(0);
+    pages.inventoryPage.addProductToCartByIndex(1);
+    pages.inventoryPage.navigateToCart();
+    pages.cartPage.elements.cartItems().should('have.length', 2);
+    pages.cartPage.removeFirstItem();
+    pages.cartPage.elements.cartItems().should('have.length', 1);
     cy.screenshot('TC10_CartAfterRemovingItem');
   });
 
