@@ -5,7 +5,9 @@ class CheckoutPage {
     postalCodeInput: () => cy.get('#postal-code'),
     continueButton: () => cy.get('#continue'),
     finishButton: () => cy.get('#finish'),
-    completeHeader: () => cy.get('.complete-header')
+    completeHeader: () => cy.get('.complete-header'),
+    cancelBtn: () => cy.get('#cancel'),
+    titleHeader: () => cy.get('.title')
   };
 
   fillCheckoutInformation(firstName, lastName, postalCode) {
@@ -20,8 +22,12 @@ class CheckoutPage {
   }
 
   ProceedCheckoutByFillingDetails(firstName, lastName, postalCode) {
-    this.fillCheckoutInformation(firstName,lastName,postalCode);
+    this.fillCheckoutInformation(firstName, lastName, postalCode);
     this.completeCheckout();
+  }
+
+  cancelCheckout() {
+    this.elements.cancelBtn().click();
   }
 }
 
