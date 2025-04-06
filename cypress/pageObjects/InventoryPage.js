@@ -13,6 +13,17 @@ class InventoryPage {
     this.elements.productSortDropdown().select(order);
   }
 
+  verifySorting(option){
+    cy.get(option.selector).then(($items) => {
+      const texts = Cypress._.map($items, (el) => el.innerText.trim());
+
+      const sortedTexts = [...texts].sort((a, b) => {
+        return option.order === 'asc' ? a.localeCompare(b, undefined, { numeric: true }) : b.localeCompare(a, undefined, { numeric: true });
+      });
+
+      expect(texts).to.deep.equal(sortedTexts);
+    });
+  }
   addProductToCart(productName) {
     this.elements.addToCartButton(productName).click();
   }

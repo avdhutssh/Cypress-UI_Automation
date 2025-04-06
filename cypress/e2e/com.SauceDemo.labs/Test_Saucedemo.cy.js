@@ -50,7 +50,7 @@ describe('SauceDemo E2E Tests', () => {
     cy.verifyMessage(pages.checkoutPage.elements.titleHeader, 'Products');
     cy.screenshot('TC04_Cancel_Functionality_Checkout');
   });
- 
+
   it('TC05 - Validate Cart Item Count and Total', () => {
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.addProductToCartByIndex(0);
@@ -60,16 +60,16 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC05_CartWith2Items');
   });
 
-  it.only('TC06 - Validate Logout Functionality', () => {
+  it('TC06 - Validate Logout Functionality', () => {
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.logout();
     cy.url().should('eq', testData.baseURL);
     cy.screenshot('TC06_LogoutSuccess');
   });
 
-  // @tag regression
-  it('TC07 - Verify Product Sorting Functionality', () => {
-    login('standard_user', 'secret_sauce');
+  it.only('TC07 - Verify Product Sorting Functionality', () => {
+
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
 
     const sortingOptions = [
       { value: 'az', selector: '.inventory_item_name', order: 'asc' },
@@ -79,17 +79,8 @@ describe('SauceDemo E2E Tests', () => {
     ];
 
     sortingOptions.forEach((option) => {
-      cy.get('.product_sort_container').select(option.value);
-
-      cy.get(option.selector).then(($items) => {
-        const texts = Cypress._.map($items, (el) => el.innerText.trim());
-
-        const sortedTexts = [...texts].sort((a, b) => {
-          return option.order === 'asc' ? a.localeCompare(b, undefined, { numeric: true }) : b.localeCompare(a, undefined, { numeric: true });
-        });
-
-        expect(texts).to.deep.equal(sortedTexts);
-      });
+      pages.inventoryPage.sortProducts(option.value);
+      pages.inventoryPage.verifySorting(option);
     });
 
     cy.screenshot('TC07_ProductSortingVerification');
