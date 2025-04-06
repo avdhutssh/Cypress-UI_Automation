@@ -7,13 +7,33 @@ class CheckoutPage {
     finishButton: () => cy.get('#finish'),
     completeHeader: () => cy.get('.complete-header'),
     cancelBtn: () => cy.get('#cancel'),
-    titleHeader: () => cy.get('.title')
+    titleHeader: () => cy.get('.title'),
+    errorField: () => cy.get('[data-test="error"]')
   };
 
   fillCheckoutInformation(firstName, lastName, postalCode) {
     this.elements.firstNameInput().type(firstName);
     this.elements.lastNameInput().type(lastName);
     this.elements.postalCodeInput().type(postalCode);
+    this.ClickOnContinue();
+  }
+
+  enterFirstNameAndContinue(firstName) {
+    this.elements.firstNameInput().type(firstName);
+    this.ClickOnContinue();
+  }
+
+  enterLastNameAndContinue(lastName) {
+    this.elements.lastNameInput().type(lastName);
+    this.ClickOnContinue();
+  }
+
+  enterpostalCodeInputAndContinue(postalCode) {
+    this.elements.postalCodeInput().type(postalCode);
+    this.ClickOnContinue();
+  }
+
+  ClickOnContinue() {
     this.elements.continueButton().click();
   }
 

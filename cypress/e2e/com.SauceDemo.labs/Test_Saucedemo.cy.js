@@ -86,36 +86,27 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC07_ProductSortingVerification');
   });
 
-  it.only('TC08 - Verify Product Details Page', () => {
+  it('TC08 - Verify Product Details Page', () => {
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.navigateToFirstProductDetails();
     pages.inventoryPage.verifyProductDetailsVisible();
     cy.screenshot('TC08_ProductDetailsPage');
   });
 
-  // @tag regression
-  it('TC09 - Validate Error Messages for Checkout Information', () => {
-    login('standard_user', 'secret_sauce');
-
-    cy.get('.inventory_item').first().within(() => {
-      cy.contains('Add to cart').click();
-    });
-
-    cy.get('.shopping_cart_link').click();
-    cy.get('button[data-test="checkout"]').click();
-
-    cy.get('#continue').click();
-    cy.get('[data-test="error"]').should('have.text', 'Error: First Name is required');
-
-    cy.get('#first-name').type('John');
-    cy.get('#continue').click();
-    cy.get('[data-test="error"]').should('have.text', 'Error: Last Name is required');
-
-    cy.get('#last-name').type('Doe');
-    cy.get('#continue').click();
-    cy.get('[data-test="error"]').should('have.text', 'Error: Postal Code is required');
-
+  it.only('TC09 - Validate Error Messages for Checkout Information', () => {
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
+    pages.inventoryPage.addSpecificProductToCart(testData.products.productName);
+    pages.inventoryPage.navigateToCart();
+    pages.cartPage.NavigateToCheckout();
+    pages.checkoutPage.ClickOnContinue();
     cy.screenshot('TC09_CheckoutErrorMessages');
+    cy.verifyMessage(pages.checkoutPage.elements.errorField, 'Error: First Name is required');
+    pages.checkoutPage.enterFirstNameAndContinue("Avdhut");
+    cy.verifyMessage(pages.checkoutPage.elements.errorField, 'Error: Last Name is required');
+    pages.checkoutPage.enterLastNameAndContinue("Shirgaonkar");
+    cy.verifyMessage(pages.checkoutPage.elements.errorField, 'Error: Postal Code is required');
+    pages.checkoutPage.enterpostalCodeInputAndContinue("411057");
+    cy.verifyMessage(pages.checkoutPage.elements.titleHeader, 'Checkout: Overview');
   });
 
   // @tag regression
