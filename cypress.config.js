@@ -15,5 +15,6 @@ module.exports = defineConfig({
         return launchOptions;
       });
     },
+    trashAssetsBeforeRuns: true,
   },
 });
