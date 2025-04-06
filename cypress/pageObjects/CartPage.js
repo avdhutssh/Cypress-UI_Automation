@@ -1,7 +1,7 @@
 class CartPage {
   elements = {
     checkoutButton: () => cy.get('button[data-test="checkout"]'),
-    cartItems: () => cy.get('.cart_item'),
+    cartItems: () => cy.get('.cart_item')
   };
 
   NavigateToCheckout() {

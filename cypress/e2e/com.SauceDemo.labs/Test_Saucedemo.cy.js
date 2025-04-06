@@ -120,28 +120,22 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC10_CartAfterRemovingItem');
   });
 
-  it.only('TC11 - Validate Login with Locked-Out User', () => {
+  it('TC11 - Validate Login with Locked-Out User', () => {
     pages.loginPage.login(testData.users.lockedOut.username, testData.users.lockedOut.password);
     cy.verifyMessage(pages.loginPage.elements.errorMessage, 'Epic sadface: Sorry, this user has been locked out.');
     cy.screenshot('TC11_LockedOutUserLoginAttempt');
   });
 
   it('TC12 - Verify Persistent Cart Contents After Logout/Login', () => {
-    login('standard_user', 'secret_sauce');
-
-    cy.get('.inventory_item').first().within(() => {
-      cy.contains('Add to cart').click();
-    });
-
-    cy.get('.shopping_cart_badge').should('have.text', '1');
-
-    cy.get('#react-burger-menu-btn').click();
-    cy.get('#logout_sidebar_link').click();
-
-    login('standard_user', 'secret_sauce');
-
-    cy.get('.shopping_cart_badge').should('have.text', '1');
-
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
+    pages.inventoryPage.addProductToCartByIndex(0);
+    pages.inventoryPage.addProductToCartByIndex(1);
+    pages.inventoryPage.navigateToCart();
+    pages.cartPage.elements.cartItems().should('have.length', 2);
+    pages.inventoryPage.logout();
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
+    pages.inventoryPage.navigateToCart();
+    pages.cartPage.elements.cartItems().should('have.length', 2);
     cy.screenshot('TC12_CartPersistenceAfterLogoutLogin');
   });
 
