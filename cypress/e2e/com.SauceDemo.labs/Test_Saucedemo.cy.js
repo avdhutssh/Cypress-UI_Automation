@@ -1,3 +1,11 @@
+//###########################################################################################
+//# TC ID : 002
+//# Suite Description : Validate SauceDemo core functionalities including login, product sorting, 
+//                      add/remove cart items, checkout flow, cart persistence, and error validations
+//# Created By: Avdhut Satish Shirgaonkar
+//# Created Date: 06-April-2025
+//###########################################################################################
+
 import pages from '../../pageObjects/PageManager';
 
 describe('SauceDemo E2E Tests', () => {
