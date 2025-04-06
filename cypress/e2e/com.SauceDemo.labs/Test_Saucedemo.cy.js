@@ -4,7 +4,7 @@ describe('SauceDemo E2E Tests', () => {
   let testData;
 
   before(() => {
-    cy.fixture('testdata').then((data) => {
+    cy.fixture('testdataSauceDemo').then((data) => {
       testData = data;
     });
   });
