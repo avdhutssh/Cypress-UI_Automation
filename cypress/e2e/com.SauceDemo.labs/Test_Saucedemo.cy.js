@@ -39,7 +39,7 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC03_CheckoutWithSpecificProduct');
   });
 
-  it.only('TC04 - Verify cancel functionality on Checkout after adding specific product to cart', () => {
+  it('TC04 - Verify cancel functionality on Checkout after adding specific product to cart', () => {
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.addSpecificProductToCart(testData.products.productName);
     pages.inventoryPage.navigateToCart();
@@ -50,21 +50,13 @@ describe('SauceDemo E2E Tests', () => {
     cy.verifyMessage(pages.checkoutPage.elements.titleHeader, 'Products');
     cy.screenshot('TC04_Cancel_Functionality_Checkout');
   });
-
-  // @tag regression  
-  it('TC05 - Validate Cart Item Count and Total', () => {
-    login('standard_user', 'secret_sauce');
-
-    cy.get('.inventory_item').eq(0).within(() => {
-      cy.contains('Add to cart').click();
-    });
-
-    cy.get('.inventory_item').eq(1).within(() => {
-      cy.contains('Add to cart').click();
-    });
-
-    cy.get('.shopping_cart_link').click();
-    cy.get('.cart_item').should('have.length', 2);
+ 
+  it.only('TC05 - Validate Cart Item Count and Total', () => {
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
+    pages.inventoryPage.addProductToCartByIndex(0);
+    pages.inventoryPage.addProductToCartByIndex(1);
+    pages.inventoryPage.navigateToCart();
+    pages.cartPage.elements.cartItems().should('have.length', 2);
     cy.screenshot('TC05_CartWith2Items');
   });
 
