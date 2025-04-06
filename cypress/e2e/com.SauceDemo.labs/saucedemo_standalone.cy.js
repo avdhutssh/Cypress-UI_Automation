@@ -23,7 +23,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       login('incorrect_user', 'incorrect_password');
       cy.get('[data-test="error"]')
         .should('be.visible')
-        .and('contain', 'Username and password do not match any user in this service');
+        .and('have.text', 'Epic sadface: Username and password do not match any user in this service');
       cy.screenshot('SA_InvalidLogin');
     });
   
@@ -51,7 +51,8 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.contains('.inventory_item', productName).within(() => {
         cy.contains('Add to cart').click();
       });
-  
+      cy.screenshot('SelectSpecificProduct');
+
       cy.get('.shopping_cart_link').click();
       cy.get('button[data-test="checkout"]').click();
   
@@ -61,8 +62,27 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.get('.complete-header').should('contain.text', 'Thank you for your order!');
       cy.screenshot('CheckoutWithSpecificProduct');
     });
+
+    it('TC04 - Verify cancel functionality on Checkout after adding specific product to cart ', () => {
+        login('standard_user', 'secret_sauce');
+    
+        cy.contains('.inventory_item', productName).within(() => {
+          cy.contains('Add to cart').click();
+        });
   
-    it('TC04 - Validate Cart Item Count and Total', () => {
+        cy.get('.shopping_cart_link').click();
+        cy.get('button[data-test="checkout"]').click();
+    
+        fillCheckoutInfo('Harry', 'Potter', '7-G');
+        
+        cy.get('.title').should('be.visible').and('have.text', "Checkout: Overview");
+        cy.get('#cancel').click();
+        cy.get('.title').should('be.visible').and('have.text', "Products");
+        cy.screenshot('SA_After_Cancel_Btn_Click');
+      });
+  
+      
+    it('TC05 - Validate Cart Item Count and Total', () => {
       login('standard_user', 'secret_sauce');
   
       cy.get('.inventory_item').eq(0).within(() => {
@@ -78,9 +98,8 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.screenshot('CartWith2Items');
     });
   
-    it('TC05 - Validate Logout Functionality', () => {
+    it('TC06 - Validate Logout Functionality', () => {
       login('standard_user', 'secret_sauce');
-  
       cy.get('#react-burger-menu-btn').click();
       cy.get('#logout_sidebar_link').should('be.visible').click();
       cy.url().should('eq', baseUrl);
