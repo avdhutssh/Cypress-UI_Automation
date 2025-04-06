@@ -16,5 +16,6 @@ module.exports = defineConfig({
       });
     },
     trashAssetsBeforeRuns: true,
+    video: true,
   },
 });
