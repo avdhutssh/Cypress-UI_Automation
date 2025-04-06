@@ -105,5 +105,121 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.url().should('eq', baseUrl);
       cy.screenshot('LogoutSuccess');
     });
+
+    it('TC07 - Verify Product Sorting Functionality', () => {
+        login('standard_user', 'secret_sauce');
+    
+        const sortingOptions = [
+          { value: 'az', selector: '.inventory_item_name', order: 'asc' },
+          { value: 'za', selector: '.inventory_item_name', order: 'desc' },
+          { value: 'lohi', selector: '.inventory_item_price', order: 'asc' },
+          { value: 'hilo', selector: '.inventory_item_price', order: 'desc' },
+        ];
+    
+        sortingOptions.forEach((option) => {
+          cy.get('.product_sort_container').select(option.value);
+          cy.get(option.selector).then(($items) => {
+            const texts = $items.map((index, el) => Cypress.$(el).text()).get();
+            const sortedTexts = [...texts].sort((a, b) => {
+              return option.order === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
+            });
+            expect(texts).to.deep.equal(sortedTexts);
+          });
+        });
+    
+        cy.screenshot('ProductSortingVerification');
+      });
+    
+      it('TC08 - Verify Product Details Page', () => {
+        login('standard_user', 'secret_sauce');
+    
+        cy.get('.inventory_item').first().within(() => {
+          cy.get('.inventory_item_name').click();
+        });
+    
+        cy.url().should('include', '/inventory-item.html');
+        cy.get('.inventory_details_name').should('be.visible');
+        cy.get('.inventory_details_desc').should('be.visible');
+        cy.get('.inventory_details_price').should('be.visible');
+    
+        cy.screenshot('ProductDetailsPage');
+      });
+    
+      it('TC09 - Validate Error Messages for Checkout Information', () => {
+        login('standard_user', 'secret_sauce');
+    
+        cy.get('.inventory_item').first().within(() => {
+          cy.contains('Add to cart').click();
+        });
+    
+        cy.get('.shopping_cart_link').click();
+        cy.get('button[data-test="checkout"]').click();
+    
+        cy.get('#continue').click();
+        cy.get('[data-test="error"]').should('have.text', 'Error: First Name is required');
+    
+        cy.get('#first-name').type('John');
+        cy.get('#continue').click();
+        cy.get('[data-test="error"]').should('have.text', 'Error: Last Name is required');
+    
+        cy.get('#last-name').type('Doe');
+        cy.get('#continue').click();
+        cy.get('[data-test="error"]').should('have.text', 'Error: Postal Code is required');
+    
+        cy.screenshot('CheckoutErrorMessages');
+      });
+
+      it('TC10 - Verify Removing Items from the Cart', () => {
+        login('standard_user', 'secret_sauce');
+    
+        cy.get('.inventory_item').eq(0).within(() => {
+          cy.contains('Add to cart').click();
+        });
+    
+        cy.get('.inventory_item').eq(1).within(() => {
+          cy.contains('Add to cart').click();
+        });
+    
+        cy.get('.shopping_cart_link').click();
+    
+        cy.get('.cart_item').first().within(() => {
+          cy.contains('Remove').click();
+        });
+    
+        cy.get('.cart_item').should('have.length', 1);
+    
+        cy.screenshot('CartAfterRemovingItem');
+      });
+    
+      it('TC11 - Validate Login with Locked-Out User', () => {
+        login('locked_out_user', 'secret_sauce');
+    
+        cy.get('[data-test="error"]').should(
+          'have.text',
+          'Epic sadface: Sorry, this user has been locked out.'
+        );
+    
+        cy.screenshot('LockedOutUserLoginAttempt');
+      });
+    
+      it('TC12 - Verify Persistent Cart Contents After Logout/Login', () => {
+        login('standard_user', 'secret_sauce');
+    
+        cy.get('.inventory_item').first().within(() => {
+          cy.contains('Add to cart').click();
+        });
+    
+        cy.get('.shopping_cart_badge').should('have.text', '1');
+    
+        cy.get('#react-burger-menu-btn').click();
+        cy.get('#logout_sidebar_link').click();
+    
+        login('standard_user', 'secret_sauce');
+    
+        cy.get('.shopping_cart_badge').should('have.text', '1');
+    
+        cy.screenshot('CartPersistenceAfterLogoutLogin');
+      });
+
   });
   
