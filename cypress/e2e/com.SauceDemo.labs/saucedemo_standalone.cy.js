@@ -33,7 +33,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.get('[data-test="error"]')
         .should('be.visible')
         .and('have.text', 'Epic sadface: Username and password do not match any user in this service');
-      cy.screenshot('SA_InvalidLogin');
+      cy.screenshot('TC01_InvalidLogin');
     });
   
     // @tag regression
@@ -42,7 +42,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
   
       cy.get('.product_sort_container').select('hilo');
       cy.xpath("//button[text()='Add to cart']").first().click();
-      cy.screenshot('ClickHighestPricedProduct');
+      cy.screenshot('TC02_ClickHighestPricedProduct');
   
       cy.get('.shopping_cart_link').click();
       cy.get('button[data-test="checkout"]').click();
@@ -52,7 +52,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.get('span.title').should('have.text', 'Checkout: Overview');
       cy.get('#finish').click();
       cy.get('.complete-header').should('have.text', 'Thank you for your order!');
-      cy.screenshot('OrderConfirmation');
+      cy.screenshot('TC02_OrderConfirmation');
     });
   
     // @tag regression
@@ -62,7 +62,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.contains('.inventory_item', productName).within(() => {
         cy.contains('Add to cart').click();
       });
-      cy.screenshot('SelectSpecificProduct');
+      cy.screenshot('TC03_SelectSpecificProduct');
 
       cy.get('.shopping_cart_link').click();
       cy.get('button[data-test="checkout"]').click();
@@ -71,7 +71,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
   
       cy.get('#finish').click();
       cy.get('.complete-header').should('contain.text', 'Thank you for your order!');
-      cy.screenshot('CheckoutWithSpecificProduct');
+      cy.screenshot('TC03_CheckoutWithSpecificProduct');
     });
 
     // @tag regression
@@ -90,7 +90,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.get('.title').should('be.visible').and('have.text', "Checkout: Overview");
         cy.get('#cancel').click();
         cy.get('.title').should('be.visible').and('have.text', "Products");
-        cy.screenshot('SA_After_Cancel_Btn_Click');
+        cy.screenshot('TC04_Cancel_Functionality_Checkout');
       });
   
     // @tag regression  
@@ -107,7 +107,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
   
       cy.get('.shopping_cart_link').click();
       cy.get('.cart_item').should('have.length', 2);
-      cy.screenshot('CartWith2Items');
+      cy.screenshot('TC05_CartWith2Items');
     });
   
     // @tag smoke
@@ -116,7 +116,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.get('#react-burger-menu-btn').click();
       cy.get('#logout_sidebar_link').should('be.visible').click();
       cy.url().should('eq', baseUrl);
-      cy.screenshot('LogoutSuccess');
+      cy.screenshot('TC06_LogoutSuccess');
     });
 
     // @tag regression
@@ -144,7 +144,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
           });
         });
       
-        cy.screenshot('ProductSortingVerification');
+        cy.screenshot('TC07_ProductSortingVerification');
       });
       
     // @tag regression
@@ -160,7 +160,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.get('.inventory_details_desc').should('be.visible');
         cy.get('.inventory_details_price').should('be.visible');
     
-        cy.screenshot('ProductDetailsPage');
+        cy.screenshot('TC08_ProductDetailsPage');
       });
     
       // @tag regression
@@ -185,7 +185,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.get('#continue').click();
         cy.get('[data-test="error"]').should('have.text', 'Error: Postal Code is required');
     
-        cy.screenshot('CheckoutErrorMessages');
+        cy.screenshot('TC09_CheckoutErrorMessages');
       });
 
       // @tag regression
@@ -208,7 +208,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
     
         cy.get('.cart_item').should('have.length', 1);
     
-        cy.screenshot('CartAfterRemovingItem');
+        cy.screenshot('TC10_CartAfterRemovingItem');
       });
     
       // @tag smoke
@@ -220,7 +220,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
           'Epic sadface: Sorry, this user has been locked out.'
         );
     
-        cy.screenshot('LockedOutUserLoginAttempt');
+        cy.screenshot('TC11_LockedOutUserLoginAttempt');
       });
     
       // @tag smoke
@@ -240,7 +240,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
     
         cy.get('.shopping_cart_badge').should('have.text', '1');
     
-        cy.screenshot('CartPersistenceAfterLogoutLogin');
+        cy.screenshot('TC12_CartPersistenceAfterLogoutLogin');
       });
 
   });
