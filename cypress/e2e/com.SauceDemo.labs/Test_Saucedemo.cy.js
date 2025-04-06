@@ -51,7 +51,7 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC04_Cancel_Functionality_Checkout');
   });
  
-  it.only('TC05 - Validate Cart Item Count and Total', () => {
+  it('TC05 - Validate Cart Item Count and Total', () => {
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
     pages.inventoryPage.addProductToCartByIndex(0);
     pages.inventoryPage.addProductToCartByIndex(1);
@@ -60,12 +60,10 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC05_CartWith2Items');
   });
 
-  // @tag smoke
-  it('TC06 - Validate Logout Functionality', () => {
-    login('standard_user', 'secret_sauce');
-    cy.get('#react-burger-menu-btn').click();
-    cy.get('#logout_sidebar_link').should('be.visible').click();
-    cy.url().should('eq', baseUrl);
+  it.only('TC06 - Validate Logout Functionality', () => {
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
+    pages.inventoryPage.logout();
+    cy.url().should('eq', testData.baseURL);
     cy.screenshot('TC06_LogoutSuccess');
   });
 
