@@ -1,3 +1,11 @@
+//###########################################################################################
+//# TC ID : 001
+//# Suite Description : Validate SauceDemo core functionalities including login, product sorting, 
+//                      add/remove cart items, checkout flow, cart persistence, and error validations
+//# Created By: Avdhut Satish Shirgaonkar
+//# Created Date: 06-April-2025
+//###########################################################################################
+
 describe('Standalone Cypress Tests for SauceDemo', () => {
     const baseUrl = 'https://www.saucedemo.com/';
     const productName = 'Sauce Labs Backpack';
@@ -19,6 +27,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.visit(baseUrl);
     });
   
+    // @tag smoke
     it('TC01 - Validate Incorrect Login Attempt', () => {
       login('incorrect_user', 'incorrect_password');
       cy.get('[data-test="error"]')
@@ -27,6 +36,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.screenshot('SA_InvalidLogin');
     });
   
+    // @tag regression
     it('TC02 - Add Highest Priced Product to Cart and Checkout', () => {
       login('standard_user', 'secret_sauce');
   
@@ -45,6 +55,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.screenshot('OrderConfirmation');
     });
   
+    // @tag regression
     it('TC03 - Add Specific Product and Checkout', () => {
       login('standard_user', 'secret_sauce');
   
@@ -63,6 +74,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.screenshot('CheckoutWithSpecificProduct');
     });
 
+    // @tag regression
     it('TC04 - Verify cancel functionality on Checkout after adding specific product to cart ', () => {
         login('standard_user', 'secret_sauce');
     
@@ -81,7 +93,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.screenshot('SA_After_Cancel_Btn_Click');
       });
   
-      
+    // @tag regression  
     it('TC05 - Validate Cart Item Count and Total', () => {
       login('standard_user', 'secret_sauce');
   
@@ -98,6 +110,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.screenshot('CartWith2Items');
     });
   
+    // @tag smoke
     it('TC06 - Validate Logout Functionality', () => {
       login('standard_user', 'secret_sauce');
       cy.get('#react-burger-menu-btn').click();
@@ -106,30 +119,35 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
       cy.screenshot('LogoutSuccess');
     });
 
+    // @tag regression
     it('TC07 - Verify Product Sorting Functionality', () => {
         login('standard_user', 'secret_sauce');
-    
+      
         const sortingOptions = [
           { value: 'az', selector: '.inventory_item_name', order: 'asc' },
           { value: 'za', selector: '.inventory_item_name', order: 'desc' },
           { value: 'lohi', selector: '.inventory_item_price', order: 'asc' },
           { value: 'hilo', selector: '.inventory_item_price', order: 'desc' },
         ];
-    
+      
         sortingOptions.forEach((option) => {
           cy.get('.product_sort_container').select(option.value);
+      
           cy.get(option.selector).then(($items) => {
-            const texts = $items.map((index, el) => Cypress.$(el).text()).get();
+            const texts = Cypress._.map($items, (el) => el.innerText.trim());
+      
             const sortedTexts = [...texts].sort((a, b) => {
-              return option.order === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
+              return option.order === 'asc' ? a.localeCompare(b, undefined, { numeric: true }) : b.localeCompare(a, undefined, { numeric: true });
             });
+      
             expect(texts).to.deep.equal(sortedTexts);
           });
         });
-    
+      
         cy.screenshot('ProductSortingVerification');
       });
-    
+      
+    // @tag regression
       it('TC08 - Verify Product Details Page', () => {
         login('standard_user', 'secret_sauce');
     
@@ -145,6 +163,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.screenshot('ProductDetailsPage');
       });
     
+      // @tag regression
       it('TC09 - Validate Error Messages for Checkout Information', () => {
         login('standard_user', 'secret_sauce');
     
@@ -169,6 +188,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.screenshot('CheckoutErrorMessages');
       });
 
+      // @tag regression
       it('TC10 - Verify Removing Items from the Cart', () => {
         login('standard_user', 'secret_sauce');
     
@@ -191,6 +211,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.screenshot('CartAfterRemovingItem');
       });
     
+      // @tag smoke
       it('TC11 - Validate Login with Locked-Out User', () => {
         login('locked_out_user', 'secret_sauce');
     
@@ -202,6 +223,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
         cy.screenshot('LockedOutUserLoginAttempt');
       });
     
+      // @tag smoke
       it('TC12 - Verify Persistent Cart Contents After Logout/Login', () => {
         login('standard_user', 'secret_sauce');
     
