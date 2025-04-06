@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "cypress": "^14.2.1"
+    "cypress": "^14.2.1",
+    "cypress-grep": "^3.0.4",
+    "cypress-tags": "^1.2.2"
   },
   "name": "cypress-ui_automation",
   "version": "1.0.0",

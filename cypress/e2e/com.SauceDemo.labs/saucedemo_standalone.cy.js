@@ -28,7 +28,7 @@ describe('Standalone Cypress Tests for SauceDemo', () => {
     });
   
     // @tag smoke
-    it('TC01 - Validate Incorrect Login Attempt', () => {
+    it('TC01 - {@smoke} Validate Incorrect Login Attempt', () => {
       login('incorrect_user', 'incorrect_password');
       cy.get('[data-test="error"]')
         .should('be.visible')
