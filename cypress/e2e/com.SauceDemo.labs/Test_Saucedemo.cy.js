@@ -67,7 +67,7 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC06_LogoutSuccess');
   });
 
-  it.only('TC07 - Verify Product Sorting Functionality', () => {
+  it('TC07 - Verify Product Sorting Functionality', () => {
 
     pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
 
@@ -86,19 +86,10 @@ describe('SauceDemo E2E Tests', () => {
     cy.screenshot('TC07_ProductSortingVerification');
   });
 
-  // @tag regression
-  it('TC08 - Verify Product Details Page', () => {
-    login('standard_user', 'secret_sauce');
-
-    cy.get('.inventory_item').first().within(() => {
-      cy.get('.inventory_item_name').click();
-    });
-
-    cy.url().should('include', '/inventory-item.html');
-    cy.get('.inventory_details_name').should('be.visible');
-    cy.get('.inventory_details_desc').should('be.visible');
-    cy.get('.inventory_details_price').should('be.visible');
-
+  it.only('TC08 - Verify Product Details Page', () => {
+    pages.loginPage.login(testData.users.standard.username, testData.users.standard.password);
+    pages.inventoryPage.navigateToFirstProductDetails();
+    pages.inventoryPage.verifyProductDetailsVisible();
     cy.screenshot('TC08_ProductDetailsPage');
   });
 

@@ -6,7 +6,10 @@ class InventoryPage {
     addFirstProductToCart: () => cy.get('button[data-test^="add-to-cart"]').first(),
     addToCartButtonIndex: () => cy.get('.inventory_item'),
     openMenuLabel: () => cy.get('#react-burger-menu-btn'),
-    logoutLabel: () => cy.get('#logout_sidebar_link')
+    logoutLabel: () => cy.get('#logout_sidebar_link'),
+    productName: () => cy.get('.inventory_details_name'),
+    productDescription: () => cy.get('.inventory_details_desc'),
+    productPrice: () => cy.get('.inventory_details_price'),
   };
 
   sortProducts(order) {
@@ -52,6 +55,17 @@ class InventoryPage {
     cy.contains('.inventory_item', productName).within(() => {
       cy.contains('Add to cart').click();
     });
+  }
+
+  navigateToFirstProductDetails() {
+    this.elements.addToCartButtonIndex().first().find('.inventory_item_name').click();
+  }
+
+  verifyProductDetailsVisible() {
+    cy.url().should('include', '/inventory-item.html');
+    this.elements.productName().should('be.visible');
+    this.elements.productDescription().should('be.visible');
+    this.elements.productPrice().should('be.visible');
   }
 
   logout(){
