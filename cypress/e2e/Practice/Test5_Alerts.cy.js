@@ -47,4 +47,14 @@ describe('Advanced UI Elements', function () {
 
         cy.get('#result').should('contain', 'You entered:')
     })
+
+    it('Promt Alert - Click Cancel', function () {
+        cy.visit("");
+        cy.window().then((win) => {
+            cy.stub(win, 'promt').returns(null);
+            cy.contains('Click for JS Prompt').click();
+        })
+
+        cy.get('#result').should('contain', 'You entered: null')
+    })
 })
