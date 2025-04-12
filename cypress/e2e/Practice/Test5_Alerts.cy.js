@@ -37,4 +37,14 @@ describe('Advanced UI Elements', function () {
 
         cy.get('#result').should('contain', 'You entered: Hello Avdhut')
     })
+
+    it('Promt Alert - Click Ok', function () {
+        cy.visit("");
+        cy.window().then((win) => {
+            cy.stub(win, 'promt').returns('');
+            cy.contains('Click for JS Prompt').click();
+        })
+
+        cy.get('#result').should('contain', 'You entered:')
+    })
 })
