@@ -1,7 +1,7 @@
 describe('Advanced UI Elements', function () {
 
     it('Simple alert', function () {
-        cy.visit("");
+        cy.visit("https://the-internet.herokuapp.com/javascript_alerts");
         cy.contains('Click for JS Alert').click();
         cy.on('window:alert', (alertText) => {
             expect(alertText).to.equal('I am a JS Alert');
@@ -10,28 +10,28 @@ describe('Advanced UI Elements', function () {
     })
 
     it('Confirmation alert - Ok button', function () {
-        cy.visit("");
+        cy.visit("https://the-internet.herokuapp.com/javascript_alerts");
         cy.contains('Click for JS Confirm').click();
-        cy.on('window:alert', (alertText) => {
-            (alertText).to.equal('I am a JS Confirm');
+        cy.on('window:confirm', (alertText) => {
+            expect(alertText).to.equal('I am a JS Confirm');
         })
         cy.get('#result').should('contain', 'You clicked: Ok')
     })
 
     it('Confirmation alert - Cancel button', function () {
-        cy.visit("");
+        cy.visit("https://the-internet.herokuapp.com/javascript_alerts");
         cy.contains('Click for JS Confirm').click();
-        cy.on('window:alert', (alertText) => {
-            (alertText).to.equal('I am a JS Confirm');
+        cy.on('window:confirm', (alertText) => {
+            expect(alertText).to.equal('I am a JS Confirm');
             return false;
         })
         cy.get('#result').should('contain', 'You clicked: Cancel')
     })
 
     it('Promt Alert - Enter Text', function () {
-        cy.visit("");
+        cy.visit("https://the-internet.herokuapp.com/javascript_alerts");
         cy.window().then((win) => {
-            cy.stub(win, 'promt').returns('Hello Avdhut');
+            cy.stub(win, 'prompt').returns('Hello Avdhut');
             cy.contains('Click for JS Prompt').click();
         })
 
@@ -39,9 +39,9 @@ describe('Advanced UI Elements', function () {
     })
 
     it('Promt Alert - Click Ok', function () {
-        cy.visit("");
+        cy.visit("https://the-internet.herokuapp.com/javascript_alerts");
         cy.window().then((win) => {
-            cy.stub(win, 'promt').returns('');
+            cy.stub(win, 'prompt').returns('');
             cy.contains('Click for JS Prompt').click();
         })
 
@@ -49,9 +49,9 @@ describe('Advanced UI Elements', function () {
     })
 
     it('Promt Alert - Click Cancel', function () {
-        cy.visit("");
+        cy.visit("https://the-internet.herokuapp.com/javascript_alerts");
         cy.window().then((win) => {
-            cy.stub(win, 'promt').returns(null);
+            cy.stub(win, 'prompt').returns(null);
             cy.contains('Click for JS Prompt').click();
         })
 
