@@ -17,4 +17,14 @@ describe('Advanced UI Elements', function () {
         })
         cy.get('#result').should('contain', 'You clicked: Ok')
     })
+
+    it('Confirmation alert - Cancel button', function () {
+        cy.visit("");
+        cy.contains('Click for JS Alert').click();
+        cy.on('window:alert', (alertText) => {
+            (alertText).to.equal('I am a JS Confirm');
+            return false;
+        })
+        cy.get('#result').should('contain', 'You clicked: Cancel')
+    })
 })
